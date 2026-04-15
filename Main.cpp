@@ -359,6 +359,303 @@ static void drawCitySkyline()
 
 // ─── Defense Vehicle ─────────────────────────────────────────
 
+static void drawDefenseVehicle()
+{
+    const float BX=65.0f, BY=200.0f;
+
+    // === TRACKS - Improved with track segments ===
+    // Track guide rail/torsion bar
+    col3(0.12f,0.12f,0.12f); drawRect(BX-12,BY,220,5);
+    col3(0.12f,0.12f,0.12f); drawRect(BX-12,BY+35,220,5);
+    
+    // Track segments (cleats)
+    col3(0.16f,0.16f,0.16f);
+    for(int i=0;i<9;i++){
+        drawRect(BX+2+i*21.0f,BY+8,18,3);
+        drawRect(BX+2+i*21.0f,BY+28,18,3);
+    }
+    
+    // Road wheels (main suspension wheels)
+    for(int i=0;i<8;i++){
+        col3(0.22f,0.22f,0.22f); drawFilledCircle(BX+5+i*25.0f,BY+15,13);
+        col3(0.10f,0.10f,0.10f); drawFilledCircle(BX+5+i*25.0f,BY+15, 8);
+        col3(0.18f,0.18f,0.18f); drawFilledCircle(BX+5+i*25.0f,BY+15, 4);
+    }
+    
+    // Support rollers (small upper wheels)
+    col3(0.20f,0.20f,0.20f);
+    for(int i=1;i<7;i++) drawFilledCircle(BX+5+i*25.0f,BY-3,6);
+    
+    // Drive sprocket (front wheel)
+    col3(0.25f,0.25f,0.25f); drawFilledCircle(BX+200,BY+15,16);
+    col3(0.12f,0.12f,0.12f); drawFilledCircle(BX+200,BY+15,10);
+    
+    // Idler wheel (rear)
+    col3(0.24f,0.24f,0.24f); drawFilledCircle(BX-5,BY+15,15);
+    col3(0.11f,0.11f,0.11f); drawFilledCircle(BX-5,BY+15,9);
+
+    // === Lower Hull - Armored base ===
+    // Hull bottom (sloped sides for armor)
+    col3(0.16f,0.28f,0.10f); drawRect(BX-2,BY+26,200,12);
+    
+    // Main hull sides (thicker armor)
+    col3(0.18f,0.31f,0.11f); drawRect(BX-5,BY+38,205,32);
+    
+    // Side panel details
+    col3(0.22f,0.36f,0.14f);
+    drawRect(BX+5,BY+40,185,8);
+    drawRect(BX+5,BY+58,185,8);
+    
+    // Hull vents/louvers
+    col3(0.12f,0.20f,0.08f);
+    for(int i=0;i<6;i++){
+        drawRect(BX+15+i*28.0f,BY+32,6,4);
+        drawRect(BX+15+i*28.0f,BY+62,6,4);
+    }
+
+    // === Upper Turret Hull ===
+    col3(0.20f,0.35f,0.14f); drawRect(BX+15,BY+70,165,42);
+    
+    // Turret front slope (glacis)
+    glBegin(GL_QUADS);
+    col3(0.19f,0.33f,0.13f);
+    glVertex2f(BX+15,BY+70); glVertex2f(BX+32,BY+112);
+    glVertex2f(BX+80,BY+112); glVertex2f(BX+80,BY+70);
+    glEnd();
+    
+    // Turret top with slight curve appearance
+    col3(0.22f,0.37f,0.15f);
+    drawRect(BX+20,BY+108,155,8);
+    
+    // Commander hatch
+    col3(0.14f,0.24f,0.10f);
+    drawRect(BX+130,BY+110,12,10);
+    col3(0.25f,0.40f,0.18f);
+    drawRect(BX+131,BY+111,10,8);
+    
+    // Periscope mount
+    col3(0.18f,0.30f,0.12f); drawRect(BX+155,BY+108,6,8);
+    col3(0.10f,0.16f,0.06f); drawFilledCircle(BX+158,BY+114,2);
+    
+    // Rivets along hull (realistic fasteners)
+    col3(0.28f,0.42f,0.18f);
+    for(int i=0;i<6;i++){
+        drawFilledCircle(BX+30+i*28.0f,BY+75,2);
+        drawFilledCircle(BX+30+i*28.0f,BY+105,2);
+    }
+
+    // === RADAR SYSTEM - Enhanced ===
+    // Mast support structure
+    col3(0.24f,0.40f,0.16f); drawRect(BX+22,BY+106,8,38);
+    col3(0.18f,0.30f,0.12f);
+    drawRect(BX+20,BY+140,12,2);
+    drawRect(BX+20,BY+144,12,2);
+    
+    // Mast reinforcement bands
+    col3(0.20f,0.34f,0.14f);
+    for(int i=0;i<4;i++) drawRect(BX+20,BY+112+i*8.0f,12,1);
+    
+    // Dish mounting bracket
+    col3(0.22f,0.36f,0.16f);
+    glBegin(GL_QUADS);
+    glVertex2f(BX+22,BY+144); glVertex2f(BX+28,BY+144);
+    glVertex2f(BX+30,BY+148); glVertex2f(BX+20,BY+148);
+    glEnd();
+    
+    // Dish bowl (parabolic reflector)
+    col3(0.48f,0.60f,0.32f);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(BX+25,BY+150);
+    for(int i=0;i<=24;i++){
+        float a=PI+PI*i/24.0f;
+        glVertex2f(BX+25+34.0f*cosf(a), BY+150+22.0f*sinf(a));
+    }
+    glEnd();
+    
+    // Dish reflector segments (metallic panels)
+    col3(0.52f,0.64f,0.36f);
+    for(int i=0;i<6;i++){
+        float a1=PI+PI*i/6.0f;
+        float a2=PI+PI*(i+1)/6.0f;
+        glBegin(GL_TRIANGLES);
+        glVertex2f(BX+25,BY+150);
+        glVertex2f(BX+25+34*cosf(a1), BY+150+22*sinf(a1));
+        glVertex2f(BX+25+34*cosf(a2), BY+150+22*sinf(a2));
+        glEnd();
+    }
+    
+    // Dish rim (circular edge)
+    col3(0.60f,0.70f,0.42f);
+    glLineWidth(2.5f);
+    glBegin(GL_LINE_LOOP);
+    for(int i=0;i<32;i++){
+        float a=2.0f*PI*i/32.0f;
+        glVertex2f(BX+25+34.0f*cosf(a), BY+150+22.0f*sinf(a));
+    }
+    glEnd();
+    glLineWidth(1);
+    
+    // Dish feed horn (center receiver)
+    col3(0.35f,0.50f,0.25f);
+    drawFilledCircle(BX+25,BY+150,5);
+    col3(0.58f,0.68f,0.40f);
+    drawFilledCircle(BX+25,BY+150,3);
+
+    // === MISSILE LAUNCHER SYSTEM (3 tubes) ===
+    // Launcher frame/cradle
+    col3(0.20f,0.34f,0.14f);
+    drawRect(BX+95,BY+80,48,35);
+    
+    for(int t=0;t<3;t++){
+        glPushMatrix();
+        glTranslatef(BX+119,BY+95,0);
+        glRotatef(50.0f+t*10.0f,0,0,1);
+
+        // Tube exterior (gun barrel)
+        col3(0.22f,0.36f,0.16f); drawRect(0,-6,90,12);
+        
+        // Tube ribbing (thermal dissipation fins)
+        col3(0.18f,0.30f,0.13f);
+        for(int r=0;r<8;r++) drawRect(10+r*8.0f,-6.5f,1.5f,13);
+        
+        // Tube muzzle (end cap)
+        col3(0.16f,0.27f,0.11f); drawRect(87,-7,5,14);
+        col3(0.20f,0.33f,0.14f); drawRect(88,-6,3,12);
+        
+        // Muzzle brake
+        col3(0.24f,0.38f,0.17f);
+        glBegin(GL_TRIANGLES);
+        glVertex2f(93,-8); glVertex2f(100,-10); glVertex2f(100,-6);
+        glEnd();
+        glBegin(GL_TRIANGLES);
+        glVertex2f(93,8); glVertex2f(100,10); glVertex2f(100,6);
+        glEnd();
+
+        // Missile shell in tube
+        col3(0.68f,0.68f,0.72f); drawRect(45,-5,38,10);
+        
+        // Missile warhead (pointed nose)
+        col3(0.82f,0.12f,0.08f);
+        glBegin(GL_TRIANGLES);
+        glVertex2f(83,0); glVertex2f(72,-5); glVertex2f(72,5);
+        glEnd();
+        
+        // Missile body bands (segmentation)
+        col3(0.88f,0.85f,0.20f);
+        drawRect(60,-5,4,10);
+        drawRect(50,-5,4,10);
+        
+        // Tail fin assembly
+        col3(0.48f,0.50f,0.56f);
+        glBegin(GL_POLYGON);
+        glVertex2f(45,0); glVertex2f(40,-6); glVertex2f(48,-10); glVertex2f(50,-8);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(45,0); glVertex2f(40,6); glVertex2f(48,10); glVertex2f(50,8);
+        glEnd();
+
+        glPopMatrix();
+    }
+    
+    // Launcher elevation mechanism
+    col3(0.16f,0.26f,0.10f);
+    drawRect(BX+90,BY+75,2,35);
+    drawRect(BX+145,BY+75,2,35);
+
+    // === VEHICLE DETAILS ===
+    // Headlights/searchlight
+    col3(0.28f,0.44f,0.20f); drawRect(BX+175,BY+50,8,8);
+    col3(0.60f,0.75f,0.90f); drawFilledCircle(BX+179,BY+54,3);
+    
+    // Antenna (small)
+    col3(0.20f,0.34f,0.14f); drawRect(BX+50,BY+114,2,12);
+    col3(0.25f,0.40f,0.18f); drawFilledCircle(BX+51,BY+128,2);
+
+    // Vehicle identification marking
+    col3(0.88f,0.88f,0.22f);
+    drawText(BX+110,BY+32,"ZAM-7",GLUT_BITMAP_HELVETICA_12);
+}
+
+// ─── Radar Display ───────────────────────────────────────────
+
+static void drawRadar()
+{
+    float cx=RADAR_X, cy=RADAR_Y, r=RADAR_R;
+    float sweepRad = gRadarAngle * PI/180.0f;
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
+    // Background with pulsing effect
+    float bgPulse = 0.95f + 0.05f * sinf(gFrameCounter * 0.05f);
+    col4(0.00f,0.06f,0.00f,bgPulse); drawFilledCircle(cx,cy,r);
+
+    // Concentric rings with enhanced glow
+    glLineWidth(1.0f);
+    for(int i=1;i<=4;i++){
+        col4(0.00f,0.45f,0.12f,0.6f);
+        drawCircleOutline(cx,cy,r*(float)i/4.0f);
+    }
+    // Cross hairs
+    col4(0.00f,0.42f,0.12f,0.6f);
+    drawLine(cx-r,cy,cx+r,cy);
+    drawLine(cx,cy-r,cx,cy+r);
+
+    // Sweep trail (fan) - enhanced
+    int TRAIL=50;
+    for(int i=0;i<TRAIL;i++){
+        float a=sweepRad - i*(PI/60.0f);
+        float alpha=(float)(TRAIL-i)/(float)TRAIL * 0.65f;
+        col4(0.00f,0.90f,0.25f,alpha);
+        glBegin(GL_TRIANGLES);
+        glVertex2f(cx,cy);
+        glVertex2f(cx+r*cosf(a),          cy+r*sinf(a));
+        glVertex2f(cx+r*cosf(a-PI/60.0f), cy+r*sinf(a-PI/60.0f));
+        glEnd();
+    }
+    
+    // Sweep line with glow
+    col4(0.00f,0.80f,0.20f,0.3f);
+    glLineWidth(4.0f);
+    drawLine(cx,cy, cx+r*cosf(sweepRad), cy+r*sinf(sweepRad));
+    col4(0.20f,1.00f,0.40f,1.0f);
+    glLineWidth(2.0f);
+    drawLine(cx,cy, cx+r*cosf(sweepRad), cy+r*sinf(sweepRad));
+    glLineWidth(1.0f);
+
+    // Drone blips on radar
+    for(int i=0;i<MAX_DRONES;i++){
+        if(gDrones[i].active && gDrones[i].detected){
+            // Map world position to radar screen
+            float wx=(gDrones[i].x - cx)/(RADAR_DETECT_RANGE)*r;
+            float wy=(gDrones[i].y - cy)/(RADAR_DETECT_RANGE)*r;
+            float bd=sqrtf(wx*wx+wy*wy);
+            if(bd>r-5){ wx=wx/bd*(r-5); wy=wy/bd*(r-5); }
+            // Pulsing blip
+            float blipPulse = 0.5f + 0.5f * sinf(gFrameCounter * 0.15f);
+            if(blipPulse > 0.3f){
+                col4(1.0f,0.25f,0.05f,1.0f);
+                drawFilledCircle(cx+wx,cy+wy,5);
+                col4(1.0f,0.60f,0.30f,0.6f);
+                drawFilledCircle(cx+wx,cy+wy,8);
+            }
+        }
+    }
+
+    // Radar outer ring
+    col4(0.10f,0.70f,0.25f,1.0f);
+    glLineWidth(3.0f);
+    drawCircleOutline(cx,cy,r);
+    glLineWidth(1.0f);
+
+    // Centre dot with glow
+    col4(0.60f,1.00f,0.70f,0.5f);
+    drawFilledCircle(cx,cy,8);
+    col4(0.30f,1.00f,0.50f,1.0f);
+    drawFilledCircle(cx,cy,5);
+
+    glDisable(GL_BLEND);
+}
 
 // ─── Drone ───────────────────────────────────────────────────
 // Draw an enemy drone with animation effects
